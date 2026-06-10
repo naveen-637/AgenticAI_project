@@ -2,13 +2,13 @@ import { useMemo, useState } from 'react';
 import { FiSend, FiTrash2 } from 'react-icons/fi';
 import ChatMessage from './ChatMessage.jsx';
 import LoadingSpinner from './LoadingSpinner.jsx';
-import { projects, suggestedQueries, teams, members } from '../data/mockData.js';
+import { projects, suggestedQueries, teams, members } from '../data/dataset.js';
 
 const starterMessages = [
   {
     id: 1,
     role: 'assistant',
-    text: 'Hi, I can search team, project, member, role, and status information from the mock knowledge base.',
+    text: 'Hi, I can search team, project, member, role, and status information from the CSV knowledge base.',
   },
 ];
 
@@ -32,10 +32,17 @@ function buildResponse(query) {
   }
 
   if (normalized.includes('status')) {
-    return 'Project statuses currently include Completed, Ongoing, and Planning. Three projects are marked Ongoing.';
+    const statusSummary = projects.reduce((summary, project) => {
+      summary[project.status] = (summary[project.status] ?? 0) + 1;
+      return summary;
+    }, {});
+
+    return `Project statuses currently include ${Object.entries(statusSummary)
+      .map(([status, count]) => `${status} (${count})`)
+      .join(', ')}.`;
   }
 
-  return 'I searched the mock workspace and found related knowledge across teams, members, and projects. Try asking for a team, member, role, project, or status.';
+  return 'I searched the CSV dataset and found related knowledge across teams, members, and projects. Try asking for a team, member, role, project, or status.';
 }
 
 export default function ChatWindow() {
@@ -98,7 +105,7 @@ export default function ChatWindow() {
       <section className="flex min-h-[680px] flex-col rounded-2xl border border-slate-100 bg-slate-50 shadow-soft">
         <div className="border-b border-slate-200 bg-white px-5 py-4">
           <h1 className="text-xl font-bold text-ink">Ask AI</h1>
-          <p className="mt-1 text-sm text-slate-500">Mock RAG assistant for team knowledge retrieval.</p>
+          <p className="mt-1 text-sm text-slate-500">RAG assistant for team knowledge retrieval from the CSV dataset.</p>
         </div>
 
         <div className="flex-1 space-y-4 overflow-y-auto p-5">

@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import EmptyState from '../components/EmptyState.jsx';
 import SearchBar from '../components/SearchBar.jsx';
 import TeamCard from '../components/TeamCard.jsx';
-import { teams } from '../data/mockData.js';
+import { teamStatuses, teams } from '../data/dataset.js';
 
 export default function Teams() {
   const [query, setQuery] = useState('');
@@ -22,10 +22,9 @@ export default function Teams() {
       <div className="grid gap-3 md:grid-cols-[1fr_220px]">
         <SearchBar value={query} onChange={setQuery} placeholder="Search teams by name, ID, or domain" />
         <select value={status} onChange={(event) => setStatus(event.target.value)} className="focus-ring h-11 rounded-xl border border-slate-200 bg-white px-3 text-sm shadow-sm">
-          <option>All</option>
-          <option>Active</option>
-          <option>Planning</option>
-          <option>Paused</option>
+          {teamStatuses.map((teamStatus) => (
+            <option key={teamStatus}>{teamStatus}</option>
+          ))}
         </select>
       </div>
       {filteredTeams.length ? (

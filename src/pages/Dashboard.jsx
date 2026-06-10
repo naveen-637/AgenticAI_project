@@ -1,7 +1,7 @@
 import { FiBriefcase, FiCheckCircle, FiLayers, FiUsers, FiUserCheck } from 'react-icons/fi';
 import SearchBar from '../components/SearchBar.jsx';
 import StatCard from '../components/StatCard.jsx';
-import { activities, members, projects, teams } from '../data/mockData.js';
+import { activities, members, projects, teams } from '../data/dataset.js';
 import { useState } from 'react';
 
 export default function Dashboard() {
@@ -16,7 +16,7 @@ export default function Dashboard() {
           <p className="text-sm font-semibold text-blue-200">Team Knowledge Assistant</p>
           <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">Welcome back, Naveen.</h2>
           <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-300 sm:text-base">
-            Search team knowledge, inspect active projects, and ask the mock RAG assistant for fast answers.
+            Search team knowledge, inspect active projects, and ask the RAG assistant for fast answers from the dataset.
           </p>
         </div>
       </section>
@@ -37,7 +37,7 @@ export default function Dashboard() {
         <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h2 className="text-lg font-bold text-ink">Recent Activity</h2>
-            <p className="text-sm text-slate-500">Latest mock retrieval, project, and sync events.</p>
+            <p className="text-sm text-slate-500">Latest project highlights from the CSV dataset.</p>
           </div>
         </div>
         <div className="mt-5 divide-y divide-slate-100">

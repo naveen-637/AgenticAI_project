@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import EmptyState from '../components/EmptyState.jsx';
 import MemberCard from '../components/MemberCard.jsx';
 import SearchBar from '../components/SearchBar.jsx';
-import { members } from '../data/mockData.js';
+import { members } from '../data/dataset.js';
 
 export default function Members() {
   const [query, setQuery] = useState('');

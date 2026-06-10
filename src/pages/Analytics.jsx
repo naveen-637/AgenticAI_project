@@ -1,6 +1,6 @@
 import { FiActivity, FiClock, FiDatabase, FiSearch, FiShield, FiTrendingUp } from 'react-icons/fi';
 import StatCard from '../components/StatCard.jsx';
-import { analytics } from '../data/mockData.js';
+import { analytics } from '../data/dataset.js';
 
 const icons = [FiDatabase, FiSearch, FiClock, FiTrendingUp, FiActivity, FiShield];
 const accents = [
@@ -17,7 +17,7 @@ export default function Analytics() {
     <div className="space-y-5">
       <div>
         <h1 className="text-2xl font-bold text-ink">Analytics</h1>
-        <p className="mt-1 text-sm text-slate-500">Static mock statistics for the knowledge assistant workspace.</p>
+        <p className="mt-1 text-sm text-slate-500">Statistics derived from the uploaded team-project CSV dataset.</p>
       </div>
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {analytics.map((item, index) => (

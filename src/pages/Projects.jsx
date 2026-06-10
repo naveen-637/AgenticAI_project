@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import EmptyState from '../components/EmptyState.jsx';
 import ProjectCard from '../components/ProjectCard.jsx';
 import SearchBar from '../components/SearchBar.jsx';
-import { projects } from '../data/mockData.js';
+import { projectStatuses, projects } from '../data/dataset.js';
 
 export default function Projects() {
   const [query, setQuery] = useState('');
@@ -26,10 +26,9 @@ export default function Projects() {
       <div className="grid gap-3 md:grid-cols-[1fr_220px]">
         <SearchBar value={query} onChange={setQuery} placeholder="Search projects" />
         <select value={status} onChange={(event) => setStatus(event.target.value)} className="focus-ring h-11 rounded-xl border border-slate-200 bg-white px-3 text-sm shadow-sm">
-          <option>All</option>
-          <option>Ongoing</option>
-          <option>Completed</option>
-          <option>Planning</option>
+          {projectStatuses.map((projectStatus) => (
+            <option key={projectStatus}>{projectStatus}</option>
+          ))}
         </select>
       </div>
       {filteredProjects.length ? (

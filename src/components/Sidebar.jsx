@@ -47,8 +47,8 @@ export default function Sidebar({ isOpen, onClose }) {
       </nav>
 
       <div className="mt-auto rounded-2xl bg-slate-50 p-4">
-        <p className="text-sm font-semibold text-ink">Mock RAG System</p>
-        <p className="mt-1 text-xs leading-5 text-slate-500">Frontend-only demo using static team knowledge data.</p>
+        <p className="text-sm font-semibold text-ink">CSV RAG System</p>
+        <p className="mt-1 text-xs leading-5 text-slate-500">Team knowledge powered by the project dataset.</p>
       </div>
     </aside>
   );

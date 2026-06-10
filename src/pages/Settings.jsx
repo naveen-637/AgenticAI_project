@@ -53,11 +53,11 @@ export default function Settings() {
           </span>
           <div>
             <h2 className="font-bold text-ink">API Key</h2>
-            <p className="text-sm text-slate-500">Frontend mock input. No key is submitted.</p>
+            <p className="text-sm text-slate-500">Frontend-only input. No key is submitted.</p>
           </div>
         </div>
         <div className="mt-5 flex flex-col gap-3 sm:flex-row">
-          <input type="password" defaultValue="mock-api-key-12345" className="focus-ring h-11 min-w-0 flex-1 rounded-xl border border-slate-200 px-3 text-sm shadow-sm" />
+          <input type="password" defaultValue="dataset-api-key-placeholder" className="focus-ring h-11 min-w-0 flex-1 rounded-xl border border-slate-200 px-3 text-sm shadow-sm" />
           <button type="button" className="focus-ring inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-brand-600 px-5 text-sm font-semibold text-white transition hover:bg-brand-700">
             <FiSave />
             Save
