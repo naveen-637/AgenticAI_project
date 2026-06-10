@@ -1,5 +1,4 @@
-import { FiBell, FiMenu, FiSearch } from 'react-icons/fi';
-import BackendStatus from './BackendStatus.jsx';
+import { FiMenu, FiSearch } from 'react-icons/fi';
 
 export default function Navbar({ onMenuClick }) {
   return (
@@ -18,14 +17,6 @@ export default function Navbar({ onMenuClick }) {
         <div className="hidden min-w-0 max-w-md flex-1 items-center rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-500 md:flex">
           <FiSearch className="mr-2 h-4 w-4" />
           Search team knowledge
-        </div>
-
-        <div className="flex items-center gap-3">
-          <BackendStatus />
-          <button type="button" className="focus-ring grid h-10 w-10 place-items-center rounded-xl border border-slate-200 bg-white text-slate-600 transition hover:bg-slate-50" title="Notifications">
-            <FiBell />
-          </button>
-          <div className="grid h-10 w-10 place-items-center rounded-xl bg-slate-900 text-sm font-bold text-white">NK</div>
         </div>
       </div>
     </header>
