@@ -16,19 +16,36 @@ function buildResponse(query) {
   const normalized = query.toLowerCase();
 
   if (normalized.includes('team')) {
-    return `Found ${teams.length} teams. ${teams[0].name} owns ${teams[0].projectCount} projects with ${teams[0].memberCount} members.`;
+    return {
+      text: `Found ${teams.length} teams. ${teams[0].name} owns ${teams[0].projectCount} projects with ${teams[0].memberCount} members.`,
+      agent: 'Team Agent',
+      sources: teams.slice(0, 4).map((t) => t.name),
+    };
   }
 
   if (normalized.includes('project')) {
-    return `There are ${projects.length} projects. Ongoing work includes ${projects.filter((project) => project.status === 'Ongoing').map((project) => project.name).join(', ')}.`;
+    const ongoing = projects.filter((p) => p.status === 'Ongoing');
+    return {
+      text: `There are ${projects.length} projects. Ongoing work includes ${ongoing.map((p) => p.name).join(', ')}.`,
+      agent: 'Project Agent',
+      sources: ongoing.slice(0, 4).map((p) => p.name),
+    };
   }
 
   if (normalized.includes('member')) {
-    return `The knowledge base has ${members.length} members. Example: ${members[0].name} is a ${members[0].role} on ${members[0].projectName}.`;
+    return {
+      text: `The knowledge base has ${members.length} members. Example: ${members[0].name} is a ${members[0].role} on ${members[0].projectName}.`,
+      agent: 'Member Agent',
+      sources: members.slice(0, 4).map((m) => m.name),
+    };
   }
 
   if (normalized.includes('role')) {
-    return `Roles include ${[...new Set(members.map((member) => member.role))].slice(0, 5).join(', ')}.`;
+    return {
+      text: `Roles include ${[...new Set(members.map((m) => m.role))].slice(0, 5).join(', ')}.`,
+      agent: 'Member Agent',
+      sources: [...new Set(members.map((m) => m.role))].slice(0, 4),
+    };
   }
 
   if (normalized.includes('status')) {
@@ -36,13 +53,18 @@ function buildResponse(query) {
       summary[project.status] = (summary[project.status] ?? 0) + 1;
       return summary;
     }, {});
-
-    return `Project statuses currently include ${Object.entries(statusSummary)
-      .map(([status, count]) => `${status} (${count})`)
-      .join(', ')}.`;
+    return {
+      text: `Project statuses currently include ${Object.entries(statusSummary).map(([s, c]) => `${s} (${c})`).join(', ')}.`,
+      agent: 'Project Agent',
+      sources: projects.slice(0, 4).map((p) => p.name),
+    };
   }
 
-  return 'I searched the CSV dataset and found related knowledge across teams, members, and projects. Try asking for a team, member, role, project, or status.';
+  return {
+    text: 'I searched the CSV dataset and found related knowledge across teams, members, and projects. Try asking for a team, member, role, project, or status.',
+    agent: 'RAG Agent',
+    sources: [...teams.slice(0, 2).map((t) => t.name), ...projects.slice(0, 2).map((p) => p.name)],
+  };
 }
 
 export default function ChatWindow() {
@@ -62,9 +84,10 @@ export default function ChatWindow() {
     setIsTyping(true);
 
     window.setTimeout(() => {
+      const response = buildResponse(trimmed);
       setMessages((current) => [
         ...current,
-        { id: Date.now() + 1, role: 'assistant', text: buildResponse(trimmed) },
+        { id: Date.now() + 1, role: 'assistant', text: response.text, agent: response.agent, sources: response.sources },
       ]);
       setIsTyping(false);
     }, 700);

@@ -142,6 +142,9 @@ export const analytics = [
 
 export const projectStatuses = ['All', ...Object.keys(statusCounts).sort()];
 export const teamStatuses = ['All', ...new Set(teams.map((team) => team.status))];
+export const allRoles = ['All', ...Object.keys(roleCounts).sort()];
+export const allDomains = ['All', ...Object.keys(domainCounts).sort()];
+export const allTechStacks = ['All', ...[...new Set(projects.flatMap((p) => p.techStack))].sort()];
 
 export const suggestedQueries = [
   'Show Team Details',
