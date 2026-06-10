@@ -18,40 +18,14 @@ export default function Navbar({ onMenuClick }) {
 
           <div>
             <p className="text-sm text-slate-500">Workspace</p>
-            <h1 className="text-base font-bold text-slate-900 sm:text-lg">
-              Universal AI Knowledge Assistant
-            </h1>
+            <h1 className="text-base font-bold text-ink sm:text-lg">Team Knowledge Assistant</h1>
           </div>
         </div>
 
         {/* Search Bar */}
         <div className="hidden min-w-0 max-w-md flex-1 items-center rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-500 md:flex">
           <FiSearch className="mr-2 h-4 w-4" />
-          Search uploaded knowledge
-        </div>
-
-        {/* Right Section */}
-        <div className="flex items-center gap-3">
-
-          {/* Backend Status Badge */}
-          <div className="flex items-center gap-2 rounded-lg bg-green-100 px-3 py-1 text-sm font-medium text-green-700">
-            <span className="h-2 w-2 rounded-full bg-green-500"></span>
-            Online
-          </div>
-
-          {/* Notifications */}
-          <button
-            type="button"
-            className="focus-ring grid h-10 w-10 place-items-center rounded-xl border border-slate-200 bg-white text-slate-600 transition hover:bg-slate-50"
-            title="Notifications"
-          >
-            <FiBell />
-          </button>
-
-          {/* AI Avatar */}
-          <div className="grid h-10 w-10 place-items-center rounded-xl bg-slate-900 text-sm font-bold text-white">
-            AI
-          </div>
+          Search team knowledge
         </div>
 
       </div>

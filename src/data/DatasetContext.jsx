@@ -1,5 +1,7 @@
 import { createContext, useContext, useMemo, useState } from 'react';
-import { defaultDataset } from './dataset.js';
+import { teams, members, projects } from './dataset.js';
+
+const defaultDataset = { teams, members, projects };
 
 const DatasetContext = createContext(null);
 
