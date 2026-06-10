@@ -98,6 +98,7 @@ export default function Dashboard() {
         <StatCard icon={FiLayers} label="Ongoing" value={ongoing} detail="Currently in progress" accent="bg-indigo-50 text-indigo-600" />
       </section>
 
+<<<<<<< HEAD
       <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <StatCard icon={FiMessageCircle} label="Total Feedback" value={feedbackList.length} detail="All submissions" accent="bg-purple-50 text-purple-600" />
         <StatCard icon={FiStar} label="Avg Rating" value={avgRating} detail="Out of 5 stars" accent="bg-amber-50 text-amber-600" />
@@ -136,6 +137,15 @@ export default function Dashboard() {
           </div>
         </section>
       </div>
+    </div>
+  );
+}
+
+function SummaryTile({ label, value }) {
+  return (
+    <div className="rounded-2xl bg-slate-50 p-4 text-center">
+      <p className="text-xs uppercase tracking-[0.18em] text-slate-400">{label}</p>
+      <p className="mt-2 text-3xl font-bold text-ink">{value}</p>
     </div>
   );
 }

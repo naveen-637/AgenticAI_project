@@ -1,10 +1,11 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { FiSend, FiTrash2 } from 'react-icons/fi';
 import ChatMessage from './ChatMessage.jsx';
 import LoadingSpinner from './LoadingSpinner.jsx';
 import { suggestedQueries } from '../data/dataset.js';
 import { askAI } from '../services/api.js';
 
+const STORAGE_KEY = 'team-knowledge-chat-messages';
 const starterMessages = [
   {
     id: 1,
@@ -14,9 +15,13 @@ const starterMessages = [
 ];
 
 export default function ChatWindow() {
-  const [messages, setMessages] = useState(starterMessages);
+  const [messages, setMessages] = useState(() => loadStoredMessages() ?? starterMessages);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+
+  useEffect(() => {
+    saveMessages(messages);
+  }, [messages]);
 
   const history = useMemo(() => messages.filter((message) => message.role === 'user'), [messages]);
 

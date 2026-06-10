@@ -3,13 +3,12 @@ import DashboardLayout from '../layouts/DashboardLayout.jsx';
 import Analytics from '../pages/Analytics.jsx';
 import AskAI from '../pages/AskAI.jsx';
 import Dashboard from '../pages/Dashboard.jsx';
-import Feedback from '../pages/Feedback.jsx';
-import MemberDetail from '../pages/MemberDetail.jsx';
 import Members from '../pages/Members.jsx';
-import ProjectDetail from '../pages/ProjectDetail.jsx';
+import MemberDetails from '../pages/MemberDetails.jsx';
 import Projects from '../pages/Projects.jsx';
-import TeamDetail from '../pages/TeamDetail.jsx';
+import ProjectDetails from '../pages/ProjectDetails.jsx';
 import Teams from '../pages/Teams.jsx';
+import TeamDetails from '../pages/TeamDetails.jsx';
 
 export default function AppRoutes() {
   return (
@@ -18,13 +17,12 @@ export default function AppRoutes() {
         <Route path="/" element={<Dashboard />} />
         <Route path="/ask-ai" element={<AskAI />} />
         <Route path="/teams" element={<Teams />} />
-        <Route path="/teams/:teamId" element={<TeamDetail />} />
+        <Route path="/teams/:teamId" element={<TeamDetails />} />
         <Route path="/members" element={<Members />} />
-        <Route path="/members/:memberId" element={<MemberDetail />} />
+        <Route path="/members/:memberId" element={<MemberDetails />} />
         <Route path="/projects" element={<Projects />} />
-        <Route path="/projects/:projectId" element={<ProjectDetail />} />
+        <Route path="/projects/:projectId" element={<ProjectDetails />} />
         <Route path="/analytics" element={<Analytics />} />
-        <Route path="/feedback" element={<Feedback />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
