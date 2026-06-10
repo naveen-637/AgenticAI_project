@@ -1,22 +1,15 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FiBriefcase, FiCheckCircle, FiLayers, FiUsers, FiUserCheck, FiMessageCircle, FiStar, FiClock } from 'react-icons/fi';
+import { FiBriefcase, FiCheckCircle, FiLayers, FiUsers, FiUserCheck } from 'react-icons/fi';
 import SearchBar from '../components/SearchBar.jsx';
 import StatCard from '../components/StatCard.jsx';
-import FeedbackCard from '../components/FeedbackCard.jsx';
 import { activities, members, projects, teams } from '../data/dataset.js';
-import { useFeedback } from '../context/FeedbackContext.jsx';
 
 export default function Dashboard() {
   const [query, setQuery] = useState('');
-  const { feedbackList } = useFeedback();
 
   const completed = projects.filter((p) => p.status === 'Completed').length;
   const ongoing = projects.filter((p) => p.status === 'Ongoing').length;
-  const avgRating = feedbackList.length
-    ? (feedbackList.reduce((s, f) => s + f.rating, 0) / feedbackList.length).toFixed(1)
-    : '0.0';
-  const openRequests = feedbackList.filter((f) => f.category === 'Feature Request' || f.category === 'Bug Report').length;
 
   const q = query.toLowerCase().trim();
   const searchResults = useMemo(() => {
@@ -36,7 +29,6 @@ export default function Dashboard() {
         <SearchBar value={query} onChange={setQuery} placeholder="Quick search across teams, members, and projects" />
       </div>
 
-      {/* Search results */}
       {searchResults && (
         <section className="rounded-2xl border border-slate-100 bg-white p-5 shadow-soft">
           <p className="mb-4 text-sm font-semibold text-slate-500">
@@ -98,44 +90,23 @@ export default function Dashboard() {
         <StatCard icon={FiLayers} label="Ongoing" value={ongoing} detail="Currently in progress" accent="bg-indigo-50 text-indigo-600" />
       </section>
 
-      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <StatCard icon={FiMessageCircle} label="Total Feedback" value={feedbackList.length} detail="All submissions" accent="bg-purple-50 text-purple-600" />
-        <StatCard icon={FiStar} label="Avg Rating" value={avgRating} detail="Out of 5 stars" accent="bg-amber-50 text-amber-600" />
-        <StatCard icon={FiClock} label="Open Requests" value={openRequests} detail="Bugs & feature requests" accent="bg-rose-50 text-rose-600" />
-        <StatCard icon={FiCheckCircle} label="Resolved" value={feedbackList.filter((f) => f.rating >= 4).length} detail="Rated 4 stars or above" accent="bg-emerald-50 text-emerald-600" />
-      </section>
-
-      <div className="grid gap-5 lg:grid-cols-2">
-        <section className="rounded-2xl border border-slate-100 bg-white p-5 shadow-soft">
-          <div className="mb-4">
-            <h2 className="text-base font-bold text-ink">Recent Activity</h2>
-            <p className="text-xs text-slate-500">Latest project highlights from the dataset.</p>
-          </div>
-          <div className="divide-y divide-slate-100">
-            {activities.map((activity) => (
-              <div key={activity.id} className="flex flex-col gap-1 py-3.5 sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                  <p className="text-sm font-semibold text-slate-800">{activity.title}</p>
-                  <p className="text-xs text-slate-500">{activity.type}</p>
-                </div>
-                <span className="text-xs text-slate-400 shrink-0">{activity.time}</span>
+      <section className="rounded-2xl border border-slate-100 bg-white p-5 shadow-soft">
+        <div className="mb-4">
+          <h2 className="text-base font-bold text-ink">Recent Activity</h2>
+          <p className="text-xs text-slate-500">Latest project highlights from the dataset.</p>
+        </div>
+        <div className="divide-y divide-slate-100">
+          {activities.map((activity) => (
+            <div key={activity.id} className="flex flex-col gap-1 py-3.5 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <p className="text-sm font-semibold text-slate-800">{activity.title}</p>
+                <p className="text-xs text-slate-500">{activity.type}</p>
               </div>
-            ))}
-          </div>
-        </section>
-
-        <section className="rounded-2xl border border-slate-100 bg-white p-5 shadow-soft">
-          <div className="mb-4">
-            <h2 className="text-base font-bold text-ink">Recent Feedback</h2>
-            <p className="text-xs text-slate-500">Latest user submissions.</p>
-          </div>
-          <div className="divide-y divide-slate-100">
-            {feedbackList.slice(0, 3).map((f) => (
-              <FeedbackCard key={f.id} feedback={f} />
-            ))}
-          </div>
-        </section>
-      </div>
+              <span className="text-xs text-slate-400 shrink-0">{activity.time}</span>
+            </div>
+          ))}
+        </div>
+      </section>
     </div>
   );
 }

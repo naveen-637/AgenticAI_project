@@ -13,14 +13,7 @@ const links = [
 export default function Sidebar({ isOpen, onClose }) {
   const panel = (
     <aside className="flex h-full flex-col border-r border-slate-200 bg-white px-4 py-5">
-      <div className="flex items-center justify-between gap-3 px-2">
-        <div className="flex items-center gap-3">
-          <span className="grid h-11 w-11 place-items-center rounded-2xl bg-brand-600 text-lg font-black text-white">TK</span>
-          <div>
-            <p className="text-sm font-bold text-ink">Team Knowledge</p>
-            <p className="text-xs text-slate-500">Assistant</p>
-          </div>
-        </div>
+      <div className="flex items-center justify-end px-2">
         <button type="button" className="focus-ring rounded-lg p-2 text-slate-500 lg:hidden" onClick={onClose} title="Close menu">
           <FiX />
         </button>

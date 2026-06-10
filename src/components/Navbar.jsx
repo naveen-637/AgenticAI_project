@@ -1,5 +1,4 @@
-import { FiBell, FiMenu, FiSearch } from 'react-icons/fi';
-import BackendStatus from './BackendStatus.jsx';
+import { FiMenu, FiSearch } from 'react-icons/fi';
 
 export default function Navbar({ onMenuClick }) {
   return (
