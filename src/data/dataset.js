@@ -87,11 +87,14 @@ export const teams = byId(
   rows.map((row) => {
     const teamProjects = rows.filter((item) => item.TeamID === row.TeamID);
     const statuses = new Set(teamProjects.map((item) => item.ProjectStatus));
+    const firstProject = teamProjects[0] ?? {};
 
     return {
       id: row.TeamID,
       name: row.TeamName,
       domain: row.ProjectDomain,
+      projectName: firstProject.ProjectName ?? '',
+      techStack: firstProject.TechStack?.split(',').map((tech) => tech.trim()).filter(Boolean) ?? [],
       projectCount: new Set(teamProjects.map((item) => item.ProjectName)).size,
       memberCount: new Set(teamProjects.map((item) => item.MemberID)).size,
       status: statuses.has('Ongoing') ? 'Active' : 'Completed',
@@ -99,6 +102,12 @@ export const teams = byId(
   }),
   (team) => team.id
 ).sort((a, b) => a.id.localeCompare(b.id));
+
+export const getTeamById = (id) => teams.find((team) => team.id === id);
+export const getProjectById = (id) => projects.find((project) => project.id === id);
+export const getMemberById = (id) => members.find((member) => member.id === id);
+export const getTeamMembers = (teamId) => members.filter((member) => member.teamId === teamId);
+export const getProjectMembers = getTeamMembers;
 
 const statusCounts = projects.reduce((counts, project) => {
   counts[project.status] = (counts[project.status] ?? 0) + 1;
