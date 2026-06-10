@@ -1,4 +1,5 @@
 import { FiBell, FiMenu, FiSearch } from 'react-icons/fi';
+import BackendStatus from './BackendStatus.jsx';
 
 export default function Navbar({ onMenuClick }) {
   return (
@@ -20,6 +21,7 @@ export default function Navbar({ onMenuClick }) {
         </div>
 
         <div className="flex items-center gap-3">
+          <BackendStatus />
           <button type="button" className="focus-ring grid h-10 w-10 place-items-center rounded-xl border border-slate-200 bg-white text-slate-600 transition hover:bg-slate-50" title="Notifications">
             <FiBell />
           </button>

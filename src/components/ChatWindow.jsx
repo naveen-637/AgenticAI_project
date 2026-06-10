@@ -2,7 +2,8 @@ import { useMemo, useState } from 'react';
 import { FiSend, FiTrash2 } from 'react-icons/fi';
 import ChatMessage from './ChatMessage.jsx';
 import LoadingSpinner from './LoadingSpinner.jsx';
-import { projects, suggestedQueries, teams, members } from '../data/dataset.js';
+import { suggestedQueries } from '../data/dataset.js';
+import { askAI } from '../services/api.js';
 
 const starterMessages = [
   {
@@ -12,61 +13,6 @@ const starterMessages = [
   },
 ];
 
-function buildResponse(query) {
-  const normalized = query.toLowerCase();
-
-  if (normalized.includes('team')) {
-    return {
-      text: `Found ${teams.length} teams. ${teams[0].name} owns ${teams[0].projectCount} projects with ${teams[0].memberCount} members.`,
-      agent: 'Team Agent',
-      sources: teams.slice(0, 4).map((t) => t.name),
-    };
-  }
-
-  if (normalized.includes('project')) {
-    const ongoing = projects.filter((p) => p.status === 'Ongoing');
-    return {
-      text: `There are ${projects.length} projects. Ongoing work includes ${ongoing.map((p) => p.name).join(', ')}.`,
-      agent: 'Project Agent',
-      sources: ongoing.slice(0, 4).map((p) => p.name),
-    };
-  }
-
-  if (normalized.includes('member')) {
-    return {
-      text: `The knowledge base has ${members.length} members. Example: ${members[0].name} is a ${members[0].role} on ${members[0].projectName}.`,
-      agent: 'Member Agent',
-      sources: members.slice(0, 4).map((m) => m.name),
-    };
-  }
-
-  if (normalized.includes('role')) {
-    return {
-      text: `Roles include ${[...new Set(members.map((m) => m.role))].slice(0, 5).join(', ')}.`,
-      agent: 'Member Agent',
-      sources: [...new Set(members.map((m) => m.role))].slice(0, 4),
-    };
-  }
-
-  if (normalized.includes('status')) {
-    const statusSummary = projects.reduce((summary, project) => {
-      summary[project.status] = (summary[project.status] ?? 0) + 1;
-      return summary;
-    }, {});
-    return {
-      text: `Project statuses currently include ${Object.entries(statusSummary).map(([s, c]) => `${s} (${c})`).join(', ')}.`,
-      agent: 'Project Agent',
-      sources: projects.slice(0, 4).map((p) => p.name),
-    };
-  }
-
-  return {
-    text: 'I searched the CSV dataset and found related knowledge across teams, members, and projects. Try asking for a team, member, role, project, or status.',
-    agent: 'RAG Agent',
-    sources: [...teams.slice(0, 2).map((t) => t.name), ...projects.slice(0, 2).map((p) => p.name)],
-  };
-}
-
 export default function ChatWindow() {
   const [messages, setMessages] = useState(starterMessages);
   const [input, setInput] = useState('');
@@ -74,23 +20,38 @@ export default function ChatWindow() {
 
   const history = useMemo(() => messages.filter((message) => message.role === 'user'), [messages]);
 
-  const submitMessage = (text) => {
+  const submitMessage = async (text) => {
     const trimmed = text.trim();
     if (!trimmed || isTyping) return;
 
-    const userMessage = { id: Date.now(), role: 'user', text: trimmed };
-    setMessages((current) => [...current, userMessage]);
+    setMessages((current) => [...current, { id: Date.now(), role: 'user', text: trimmed }]);
     setInput('');
     setIsTyping(true);
 
-    window.setTimeout(() => {
-      const response = buildResponse(trimmed);
+    try {
+      const response = await askAI(trimmed);
       setMessages((current) => [
         ...current,
-        { id: Date.now() + 1, role: 'assistant', text: response.text, agent: response.agent, sources: response.sources },
+        {
+          id: Date.now() + 1,
+          role: 'assistant',
+          text: response.text,
+          agent: response.agent,
+          sources: response.sources,
+          retrieval_count: response.retrieval_count,
+          confidence: response.confidence,
+          coordinator_reasoning: response.coordinator_reasoning,
+          workflow: response.workflow,
+        },
       ]);
+    } catch {
+      setMessages((current) => [
+        ...current,
+        { id: Date.now() + 1, role: 'assistant', text: 'The knowledge base is currently unavailable. Please try again shortly.', agent: 'RAG Agent', sources: [], confidence: 'Low', workflow: [] },
+      ]);
+    } finally {
       setIsTyping(false);
-    }, 700);
+    }
   };
 
   return (

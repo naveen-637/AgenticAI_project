@@ -1,12 +1,19 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import EmptyState from '../components/EmptyState.jsx';
 import ProjectCard from '../components/ProjectCard.jsx';
 import SearchBar from '../components/SearchBar.jsx';
+import { CardSkeleton } from '../components/Skeleton.jsx';
 import { projectStatuses, projects } from '../data/dataset.js';
 
 export default function Projects() {
   const [query, setQuery] = useState('');
   const [status, setStatus] = useState('All');
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 600);
+    return () => clearTimeout(t);
+  }, []);
 
   const filteredProjects = useMemo(() => {
     return projects.filter((project) => {
@@ -31,11 +38,13 @@ export default function Projects() {
           ))}
         </select>
       </div>
-      {filteredProjects.length ? (
+      {loading ? (
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {filteredProjects.map((project) => (
-            <ProjectCard key={project.id} project={project} />
-          ))}
+          {[0, 1, 2, 3, 4, 5].map((i) => <CardSkeleton key={i} />)}
+        </div>
+      ) : filteredProjects.length ? (
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {filteredProjects.map((project) => <ProjectCard key={project.id} project={project} />)}
         </div>
       ) : (
         <EmptyState title="No projects found" />

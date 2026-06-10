@@ -1,6 +1,7 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { FiActivity, FiClock, FiDatabase, FiSearch, FiShield, FiTrendingUp, FiUsers, FiUserCheck, FiBriefcase } from 'react-icons/fi';
 import StatCard from '../components/StatCard.jsx';
+import { AnalyticsSkeleton } from '../components/Skeleton.jsx';
 import { analytics, allDomains, allRoles, allTechStacks, members, projects, projectStatuses, teams } from '../data/dataset.js';
 
 const icons = [FiDatabase, FiSearch, FiClock, FiTrendingUp, FiActivity, FiShield];
@@ -20,6 +21,12 @@ export default function Analytics() {
   const [role, setRole] = useState('All');
   const [domain, setDomain] = useState('All');
   const [tech, setTech] = useState('All');
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 600);
+    return () => clearTimeout(t);
+  }, []);
 
   const filteredProjects = useMemo(() =>
     projects.filter((p) =>
@@ -46,8 +53,9 @@ export default function Analytics() {
         <p className="mt-1 text-sm text-slate-500">Statistics derived from the uploaded team-project CSV dataset.</p>
       </div>
 
-      {/* Dataset Summary */}
-      <div className="rounded-2xl border border-slate-100 bg-white p-5 shadow-soft">
+      {loading ? <AnalyticsSkeleton /> : (
+        <>
+        <div className="rounded-2xl border border-slate-100 bg-white p-5 shadow-soft">
         <h2 className="mb-4 text-base font-bold text-ink">Dataset Summary</h2>
         <div className="grid gap-4 sm:grid-cols-3">
           <div className="flex items-center gap-4 rounded-xl bg-slate-50 p-4">
@@ -128,6 +136,8 @@ export default function Analytics() {
           <StatCard key={item.label} icon={icons[index]} label={item.label} value={item.value} detail={item.detail} accent={accents[index]} />
         ))}
       </div>
+        </>
+      )}
     </div>
   );
 }

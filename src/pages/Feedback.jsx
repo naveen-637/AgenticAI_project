@@ -3,12 +3,7 @@ import { FiMessageCircle, FiStar, FiCheckCircle, FiClock } from 'react-icons/fi'
 import FeedbackForm from '../components/FeedbackForm.jsx';
 import FeedbackCard from '../components/FeedbackCard.jsx';
 import StatCard from '../components/StatCard.jsx';
-
-const MOCK_FEEDBACK = [
-  { id: 1, name: 'Arjun Sharma', email: 'arjun@example.com', category: 'UI/UX', rating: 5, message: 'The dashboard layout is clean and very intuitive. Loved the analytics section!', date: '12/07/2025' },
-  { id: 2, name: 'Priya Nair', email: 'priya@example.com', category: 'Feature Request', rating: 4, message: 'Would love to see export functionality for project reports in PDF format.', date: '11/07/2025' },
-  { id: 3, name: 'Karan Mehta', email: 'karan@example.com', category: 'Bug Report', rating: 3, message: 'Search bar sometimes does not filter correctly on mobile devices.', date: '10/07/2025' },
-];
+import { useFeedback } from '../context/FeedbackContext.jsx';
 
 function Toast({ message, onClose }) {
   return (
@@ -21,11 +16,11 @@ function Toast({ message, onClose }) {
 }
 
 export default function Feedback() {
-  const [feedbackList, setFeedbackList] = useState(MOCK_FEEDBACK);
+  const { feedbackList, addFeedback } = useFeedback();
   const [toast, setToast] = useState(false);
 
   const handleSubmit = (entry) => {
-    setFeedbackList((prev) => [entry, ...prev]);
+    addFeedback(entry);
     setToast(true);
     setTimeout(() => setToast(false), 3500);
   };
@@ -33,7 +28,6 @@ export default function Feedback() {
   const avgRating = feedbackList.length
     ? (feedbackList.reduce((sum, f) => sum + f.rating, 0) / feedbackList.length).toFixed(1)
     : '0.0';
-
   const openRequests = feedbackList.filter((f) => f.category === 'Feature Request' || f.category === 'Bug Report').length;
   const resolved = feedbackList.filter((f) => f.rating >= 4).length;
 

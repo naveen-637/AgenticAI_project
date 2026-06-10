@@ -1,12 +1,20 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import EmptyState from '../components/EmptyState.jsx';
 import SearchBar from '../components/SearchBar.jsx';
 import TeamCard from '../components/TeamCard.jsx';
+import { CardSkeleton } from '../components/Skeleton.jsx';
 import { teamStatuses, teams } from '../data/dataset.js';
 
 export default function Teams() {
   const [query, setQuery] = useState('');
   const [status, setStatus] = useState('All');
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulates the async fetch that will use getTeams() from api.js
+    const t = setTimeout(() => setLoading(false), 600);
+    return () => clearTimeout(t);
+  }, []);
 
   const filteredTeams = useMemo(() => {
     return teams.filter((team) => {
@@ -27,11 +35,13 @@ export default function Teams() {
           ))}
         </select>
       </div>
-      {filteredTeams.length ? (
+      {loading ? (
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {filteredTeams.map((team) => (
-            <TeamCard key={team.id} team={team} />
-          ))}
+          {[0, 1, 2, 3, 4, 5].map((i) => <CardSkeleton key={i} />)}
+        </div>
+      ) : filteredTeams.length ? (
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {filteredTeams.map((team) => <TeamCard key={team.id} team={team} />)}
         </div>
       ) : (
         <EmptyState title="No teams found" />
